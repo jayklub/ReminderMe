@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <style>
+            body {
+              min-width:357px;
+              width:357px;
+              overflow-x:hidden;
+            }
+
+            img {
+              margin:5px;
+              border:2px solid black;
+              vertical-align:middle;
+              width:75px;
+              height:75px;
+            }
+
+            #add-section {
+                text-align: center;
+            }
+
+            #header {
+                font-size: 25px;
+                text-align: center;
+            }
+
+            #sub-header {
+                font-size: 12px;
+                text-align: center;
+            }
+
+            #page-addr {
+                width: 100%;
+            }
+            #page-name {
+                width: 100%;
+            }
+        </style>
+
+    <script>
+        if (remindMe == undefined) {var remindMe = {};}
+
+        window.onload = function () {
+            //
+            // Unpack the saved webstorage'd data.
+            //
+            if (window.localStorage.remindMeLinks == undefined) {
+                window.localStorage.remindMeLinks = "{}";
+            }
+            remindMe.storeData = JSON.parse(window.localStorage.remindMeLinks);
+
+            chrome.tabs.getSelected(null, function (tab) {
+                document.getElementById('page-name').value = tab.title; 
+                document.getElementById('page-addr').value = tab.url; 
+            });
+            
+            //
+            // load the links that are ready to be viewed.
+            //
+
+        };
+
+        //
+        // Handles adding a new link to the system
+        //
+        remindMe.addOn = function () {
+            var nameAddr = document.getElementById('page-name').value;
+            var pageAddr = document.getElementById('page-addr').value;
+            var duration = document.getelementById('duration').value;
+            var lastViewed = new Date();
+
+            remindMe.storeData = JSON.parse(window.localStorage.remindMeLinks);
+            
+            remindMe.storeData.links.push({
+                address: webAddr,
+                duration: duration,
+                lastViewed: lastViewed.getTime()
+            });
+
+            //
+            // Save the data to the localstore in-case another pop-up is queued 
+            //
+            window.localStorage.remindMeLinks = JSON.stringify(remindMe.storeData);
+        };
+    </script>
+    </head>
+
+        <body>
+            <div id='header'>Reminder Me</div>
+            <hr>
+            <div id='sub-header'>The following sites are due for a visit.</div>
+            <div id='data-bit'>
+            </div>
+            <hr>
+            <div id='add-section'>
+                <label for="page-name">title:</label>
+                <input id='page-name' />
+                <br>
+                <label for="page-addr">url:</label>
+                <input id='page-addr' />
+                <br>
+                <label for='duration'>duration</label>
+                <select id='duration'>
+                    <option value="week">Weekly</option>
+                    <option value="day">Daily</option>
+                    <option value="hour">hourly</option>
+                </select>
+                <input type="button" onclick="remindMe.addOn()" value="+" /> 
+
+                <div id='data-display'></div>
+                <div id='tab-data-display'></div>
+            </div>
+        </body>
+</html> 

@@ -1,0 +1,12 @@
+{
+    "name": "Reminder Me",
+    "version": "1.0",
+    "description": "Ever wanted a reminder to check out a website? Look no further",
+    "browser_action": {
+        "default_icon": "clock.gif",
+        "popup": "popup.html"
+    },
+    "permissions": [
+        "tabs"
+    ]
+}
